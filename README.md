@@ -1,6 +1,6 @@
-# CCTP Sample App
+# CCTP Local App
 
-A sample app used to demonstrate CCTP step by step capabilities on testnet. The app currently supports Ethereum Sepolia, Avalanche Fuji C-Chain, and Arbitrum Sepolia testnets.
+An app for me to move USDC across chains. Supporting ETH and BASE Mainnet for now.
 
 ![](./docs/screenshot.png)
 

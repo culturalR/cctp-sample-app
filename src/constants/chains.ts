@@ -5,15 +5,18 @@ export enum Chain {
   ETH = 'ETH',
   AVAX = 'AVAX',
   ARB = 'ARB',
+  BASE = 'BASE',
 }
 
 /**
  * List of all the chain/network IDs supported
  */
 export enum SupportedChainId {
+  ETH_MAINNET = 1,
   ETH_SEPOLIA = 11155111,
   AVAX_FUJI = 43113,
   ARB_SEPOLIA = 421614,
+  BASE_MAINNET = 8453,
 }
 
 /**
@@ -21,9 +24,11 @@ export enum SupportedChainId {
  * TODO: Infer from SupportedChainId
  */
 export const SupportedChainIdHex = {
+  ETH_MAINNET: '0x1',
   ETH_SEPOLIA: '0xaa36a7',
   AVAX_FUJI: '0xa869',
   ARB_SEPOLIA: '0x66eee',
+  BASE_MAINNET: '0x2105',
 }
 
 interface ChainToChainIdMap {
@@ -35,9 +40,10 @@ interface ChainToChainIdMap {
  */
 
 export const CHAIN_TO_CHAIN_ID: ChainToChainIdMap = {
-  [Chain.ETH]: SupportedChainId.ETH_SEPOLIA,
+  [Chain.ETH]: SupportedChainId.ETH_MAINNET,
   [Chain.AVAX]: SupportedChainId.AVAX_FUJI,
   [Chain.ARB]: SupportedChainId.ARB_SEPOLIA,
+  [Chain.BASE]: SupportedChainId.BASE_MAINNET,
 }
 
 interface ChainToChainNameMap {
@@ -48,9 +54,10 @@ interface ChainToChainNameMap {
  * Maps a chain to it's readable name
  */
 export const CHAIN_TO_CHAIN_NAME: ChainToChainNameMap = {
-  ETH: 'Ethereum',
-  AVAX: 'Avalanche',
-  ARB: 'Arbitrum',
+  ETH: 'Ethereum Mainnet',
+  AVAX: 'Avalanche Testnet',
+  ARB: 'Arbitrum Testnet',
+  BASE: 'BASE Mainnet',
 }
 
 /**
@@ -67,6 +74,7 @@ export enum DestinationDomain {
   ETH = 0,
   AVAX = 1,
   ARB = 3,
+  BASE = 6,
 }
 
 // https://eips.ethereum.org/EIPS/eip-3085
@@ -81,6 +89,30 @@ interface AddEthereumChainParameter {
     decimals: number
   }
   rpcUrls?: string[]
+}
+
+const ETH_MAINNET: AddEthereumChainParameter = {
+  chainId: SupportedChainIdHex.ETH_MAINNET,
+  blockExplorerUrls: ['https://etherscan.io'],
+  chainName: 'Ethereum Mainnet',
+  nativeCurrency: {
+    name: 'Ethereum',
+    symbol: 'ETH',
+    decimals: 18,
+  },
+  rpcUrls: ['https://ethereum-rpc.publicnode.com'],
+}
+
+const BASE_MAINNET: AddEthereumChainParameter = {
+  chainId: SupportedChainIdHex.BASE_MAINNET,
+  blockExplorerUrls: ['https://basescan.org'],
+  chainName: 'Base Mainnet',
+  nativeCurrency: {
+    name: 'Ethereum',
+    symbol: 'ETH',
+    decimals: 18,
+  },
+  rpcUrls: ['https://mainnet.base.org'],
 }
 
 const ETH_SEPOLIA: AddEthereumChainParameter = {
@@ -124,7 +156,9 @@ interface ChainIdToChainParameters {
 }
 
 export const CHAIN_ID_HEXES_TO_PARAMETERS: ChainIdToChainParameters = {
+  [SupportedChainIdHex.ETH_MAINNET]: ETH_MAINNET,
   [SupportedChainIdHex.ETH_SEPOLIA]: ETH_SEPOLIA,
   [SupportedChainIdHex.AVAX_FUJI]: AVAX_FUJI,
   [SupportedChainIdHex.ARB_SEPOLIA]: ARB_SEPOLIA,
+  [SupportedChainIdHex.BASE_MAINNET]: BASE_MAINNET,
 }
