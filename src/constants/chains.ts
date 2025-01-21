@@ -1,22 +1,39 @@
 /**
- * List of all the chains/networks supported
+ * List of all mainnet chains/networks supported
  */
-export enum Chain {
+export enum MainnetChain {
+  ETH = 'ETH',
+  BASE = 'BASE',
+}
+
+/**
+ * List of all testnet chains/networks supported
+ */
+export enum TestnetChain {
   ETH = 'ETH',
   AVAX = 'AVAX',
   ARB = 'ARB',
-  BASE = 'BASE',
 }
 
 /**
  * List of all the chain/network IDs supported
  */
 export enum SupportedChainId {
+  // Mainnets
   ETH_MAINNET = 1,
+  BASE_MAINNET = 8453,
+  // Testnets
   ETH_SEPOLIA = 11155111,
   AVAX_FUJI = 43113,
   ARB_SEPOLIA = 421614,
-  BASE_MAINNET = 8453,
+}
+
+// Legacy Chain enum for backward compatibility
+export enum Chain {
+  ETH = 'ETH',
+  AVAX = 'AVAX',
+  ARB = 'ARB',
+  BASE = 'BASE',
 }
 
 /**
@@ -31,14 +48,30 @@ export const SupportedChainIdHex = {
   BASE_MAINNET: '0x2105',
 }
 
-interface ChainToChainIdMap {
+export interface ChainToChainIdMap {
   [key: string]: number
 }
 
 /**
- * Maps a chain to it's chain ID
+ * Maps mainnet chains to their chain IDs
  */
+export const MAINNET_CHAIN_TO_ID: ChainToChainIdMap = {
+  [MainnetChain.ETH]: SupportedChainId.ETH_MAINNET,
+  [MainnetChain.BASE]: SupportedChainId.BASE_MAINNET,
+}
 
+/**
+ * Maps testnet chains to their chain IDs
+ */
+export const TESTNET_CHAIN_TO_ID: ChainToChainIdMap = {
+  [TestnetChain.ETH]: SupportedChainId.ETH_SEPOLIA,
+  [TestnetChain.AVAX]: SupportedChainId.AVAX_FUJI,
+  [TestnetChain.ARB]: SupportedChainId.ARB_SEPOLIA,
+}
+
+/**
+ * Legacy chain to chain ID mapping
+ */
 export const CHAIN_TO_CHAIN_ID: ChainToChainIdMap = {
   [Chain.ETH]: SupportedChainId.ETH_MAINNET,
   [Chain.AVAX]: SupportedChainId.AVAX_FUJI,
@@ -51,7 +84,24 @@ interface ChainToChainNameMap {
 }
 
 /**
- * Maps a chain to it's readable name
+ * Maps mainnet chains to their readable names
+ */
+export const MAINNET_CHAIN_TO_NAME: ChainToChainNameMap = {
+  [MainnetChain.ETH]: 'Ethereum Mainnet',
+  [MainnetChain.BASE]: 'Base Mainnet',
+}
+
+/**
+ * Maps testnet chains to their readable names
+ */
+export const TESTNET_CHAIN_TO_NAME: ChainToChainNameMap = {
+  [TestnetChain.ETH]: 'Ethereum Sepolia',
+  [TestnetChain.AVAX]: 'Avalanche Fuji',
+  [TestnetChain.ARB]: 'Arbitrum Sepolia',
+}
+
+/**
+ * Legacy chain to name mapping
  */
 export const CHAIN_TO_CHAIN_NAME: ChainToChainNameMap = {
   ETH: 'Ethereum Mainnet',

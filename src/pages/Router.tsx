@@ -1,9 +1,10 @@
-import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 
 import AppLayout from 'layouts/AppLayout'
 
+import MainnetSend from './Mainnet/MainnetSend'
 import Redeem from './Redeem/Redeem'
-import Send from './Send/Send'
+import TestnetSend from './Testnet/TestnetSend'
 import Transactions from './Transactions/Transactions'
 
 export interface RouteConfig {
@@ -14,22 +15,44 @@ export interface RouteConfig {
 }
 
 export const routes: RouteConfig[] = [
+  // Mainnet routes
   {
-    path: '/',
-    label: 'Transfer',
-    component: Send,
+    path: '/mainnet',
+    label: 'Mainnet Transfer',
+    component: MainnetSend,
     nav: true,
   },
   {
-    path: '/redeem',
-    label: 'Redeem',
+    path: '/mainnet/redeem',
+    label: 'Mainnet Redeem',
     component: Redeem,
     nav: false,
   },
+  // Testnet routes
+  {
+    path: '/testnet',
+    label: 'Testnet Transfer',
+    component: TestnetSend,
+    nav: true,
+  },
+  {
+    path: '/testnet/redeem',
+    label: 'Testnet Redeem',
+    component: Redeem,
+    nav: false,
+  },
+  // Shared routes
   {
     path: '/transactions',
     label: 'Transactions',
     component: Transactions,
+    nav: false,
+  },
+  // Root redirect
+  {
+    path: '/',
+    label: 'Root',
+    component: () => <Navigate to="/mainnet" replace />,
     nav: false,
   },
 ]

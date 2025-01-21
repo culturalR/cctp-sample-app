@@ -15,42 +15,20 @@ import { formatUnits } from 'ethers/lib/utils'
 
 import { CHAIN_ICONS } from 'assets/chains'
 import NetworkAlert from 'components/NetworkAlert/NetworkAlert'
-import { Chain, CHAIN_TO_CHAIN_ID, CHAIN_TO_CHAIN_NAME } from 'constants/chains'
+import { Chain } from 'constants/chains'
 import { DEFAULT_DECIMALS } from 'constants/tokens'
 import useTokenBalance from 'hooks/useTokenBalance'
 import { getUSDCContractAddress } from 'utils/addresses'
 
 import type { Web3Provider } from '@ethersproject/providers'
 import type { TransactionInputs } from 'contexts/AppContext'
+import type { ChainToChainIdMap } from 'constants/chains'
 
 interface SelectItem {
-  value: Chain
+  value: string
   label: string
   icon: string
 }
-
-const CHAIN_SELECT_ITEMS: SelectItem[] = [
-  {
-    value: Chain.ETH,
-    label: CHAIN_TO_CHAIN_NAME[Chain.ETH],
-    icon: CHAIN_ICONS[Chain.ETH],
-  },
-  {
-    value: Chain.AVAX,
-    label: CHAIN_TO_CHAIN_NAME[Chain.AVAX],
-    icon: CHAIN_ICONS[Chain.AVAX],
-  },
-  {
-    value: Chain.ARB,
-    label: CHAIN_TO_CHAIN_NAME[Chain.ARB],
-    icon: CHAIN_ICONS[Chain.ARB],
-  },
-  {
-    value: Chain.BASE,
-    label: CHAIN_TO_CHAIN_NAME[Chain.BASE],
-    icon: CHAIN_ICONS[Chain.BASE],
-  },
-]
 
 export const DEFAULT_FORM_INPUTS: TransactionInputs = {
   source: Chain.ETH,
@@ -60,12 +38,20 @@ export const DEFAULT_FORM_INPUTS: TransactionInputs = {
 }
 
 interface Props {
+  chainSelectItems: SelectItem[]
+  chainToChainId: ChainToChainIdMap
   handleNext: () => void
   handleUpdateForm: React.Dispatch<React.SetStateAction<TransactionInputs>>
   formInputs: TransactionInputs
 }
 
-const SendForm = ({ handleNext, handleUpdateForm, formInputs }: Props) => {
+const SendForm = ({
+  handleNext,
+  handleUpdateForm,
+  formInputs,
+  chainSelectItems,
+  chainToChainId,
+}: Props) => {
   const { account, active, chainId } = useWeb3React<Web3Provider>()
   const USDC_ADDRESS = getUSDCContractAddress(chainId)
 
@@ -85,9 +71,18 @@ const SendForm = ({ handleNext, handleUpdateForm, formInputs }: Props) => {
       !isNaN(+amount) &&
       +amount > 0 &&
       +amount <= walletUSDCBalance &&
-      CHAIN_TO_CHAIN_ID[source] === chainId
+      chainToChainId[source] === chainId
     setIsFormValid(isValid)
-  }, [source, target, address, account, amount, walletUSDCBalance, chainId])
+  }, [
+    source,
+    target,
+    address,
+    account,
+    amount,
+    walletUSDCBalance,
+    chainId,
+    chainToChainId,
+  ])
 
   useEffect(() => {
     if (account && active) {
@@ -173,14 +168,12 @@ const SendForm = ({ handleNext, handleUpdateForm, formInputs }: Props) => {
             id="source"
             label="Source"
             error={
-              account !== null &&
-              active &&
-              CHAIN_TO_CHAIN_ID[source] !== chainId
+              account !== null && active && chainToChainId[source] !== chainId
             }
             value={source}
             onChange={(event) => handleSourceChange(event.target.value)}
           >
-            {CHAIN_SELECT_ITEMS.map((chain) => renderChainMenuItem(chain))}
+            {chainSelectItems.map((chain) => renderChainMenuItem(chain))}
           </Select>
         </FormControl>
 
@@ -199,7 +192,7 @@ const SendForm = ({ handleNext, handleUpdateForm, formInputs }: Props) => {
               }))
             }
           >
-            {CHAIN_SELECT_ITEMS.map((chain) =>
+            {chainSelectItems.map((chain) =>
               renderChainMenuItem(chain, source)
             )}
           </Select>
