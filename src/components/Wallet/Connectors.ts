@@ -23,14 +23,9 @@ export const injected = new InjectedConnector({
   supportedChainIds: ALL_SUPPORTED_CHAIN_IDS,
 })
 
-if (!process.env.REACT_APP_WALLET_CONNECT_PROJECT_ID) {
-  throw new Error('Missing REACT_APP_WALLET_CONNECT_PROJECT_ID environment variable')
-}
-
 export const walletconnect = new WalletConnectConnector({
   rpc: getRpcUrls(),
   chainId: ALL_SUPPORTED_CHAIN_IDS[0], // Default to first supported chain
-  projectId: process.env.REACT_APP_WALLET_CONNECT_PROJECT_ID,
-  qrcode: true,
   supportedChainIds: ALL_SUPPORTED_CHAIN_IDS,
+  qrcode: true,
 })
